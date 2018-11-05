@@ -36,25 +36,6 @@ fn handle_ipv4_packet(interface_name: &str, ethernet: &EthernetPacket) {
 fn handle_ethernet_frame(interface: &NetworkInterface, ethernet: &EthernetPacket) {
     let interface_name = &interface.name[..];
     handle_ipv4_packet(interface_name, ethernet);
-    // match ethernet.get_ethertype() {
-    //     EtherTypes::Ipv4 => handle_ipv4_packet(interface_name, ethernet),
-    //     EtherTypes::Ipv6 => {
-    //         info!("Ipv6");
-    //         return;
-    //     }
-    //     EtherTypes::Arp => {
-    //         info!("Arp");
-    //         return;
-    //     }
-    //     _ => info!(
-    //         "[{}]: Unknown packet: {} > {}; ethertype: {:?} length: {}",
-    //         interface_name,
-    //         ethernet.get_source(),
-    //         ethernet.get_destination(),
-    //         ethernet.get_ethertype(),
-    //         ethernet.packet().len()
-    //     ),
-    // }
 }
 
 pub struct PacketReciver(NetworkInterface);
