@@ -4,6 +4,13 @@ A experiment to send data to other host by hiding the data inside of ip identifi
 
 An Implementation in Rust.
 
+## Usage
+```
+Usage:
+covert_tcp send <srcip> <dstip> <filepath>
+covert_tcp recv <iface>
+```
+
 ## Demo Sending
 
 ```
