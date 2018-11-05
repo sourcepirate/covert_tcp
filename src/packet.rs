@@ -5,6 +5,8 @@ use pnet::transport::{transport_channel, TransportReceiver, TransportSender};
 use pnet_packet::ipv4::{Ipv4Flags, MutableIpv4Packet};
 use pnet_packet::tcp::ipv4_checksum;
 use pnet_packet::tcp::MutableTcpPacket;
+use pnet_transport::ipv4_packet_iter;
+use pnet_transport::Ipv4TransportChannelIterator;
 use std::io::Error;
 use std::net::{IpAddr, SocketAddrV4};
 
@@ -29,6 +31,10 @@ impl CovertChannel {
     ) -> TResult<usize> {
         info!("Sending to : {:?}", addr);
         self.tx.send_to(packet, IpAddr::V4(addr.ip().clone()))
+    }
+
+    pub fn packets(&mut self) -> Ipv4TransportChannelIterator {
+        ipv4_packet_iter(&mut self.rx)
     }
 }
 
@@ -86,5 +92,18 @@ impl CovertConnection {
         };
         info!("Packet : {:?}", ipv4_packet);
         self.channel.send_to(addr, ipv4_packet)
+    }
+
+    pub fn recv(&mut self) -> () {
+        let mut iter = self.channel.packets();
+        loop {
+            match iter.next() {
+                Ok((packet, addr)) => info!("Recived: {:?} from {:?}", packet, addr),
+                Err(e) => {
+                    error!("Error occured : {:?}", e);
+                    break;
+                }
+            }
+        }
     }
 }
